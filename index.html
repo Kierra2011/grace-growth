@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Grace & Growth — a peaceful daily space for faith, confidence, affirmations, and gentle progress.">
+  <meta name="theme-color" content="#526b5c">
+  <title>Grace & Growth | Faith • Confidence • Progress</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="brand" href="#home">
+        <span class="brand-mark">✦</span>
+        <span>Grace <b>&</b> Growth</span>
+      </a>
+
+      <button class="menu-btn" aria-label="Open menu" aria-expanded="false">☰</button>
+
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#daily">Daily</a>
+        <a href="#affirmations">Affirmations</a>
+        <a href="#growth">Growth</a>
+      </div>
+
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">☾</button>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Your gentle place to begin again <span></span></p>
+        <h1>You are growing,<br><em>even on the days you can't see it.</em></h1>
+        <p class="hero-description">
+          A peaceful space for the moments when procrastination, self-doubt, or fear
+          gets loud. Breathe. Pray. Take one small step.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#daily">My daily encouragement <span>→</span></a>
+          <a class="btn btn-ghost" href="#affirmations">Explore affirmations</a>
+        </div>
+
+        <div class="hero-trust">
+          <span>♡</span> You don't have to be perfect to make progress.
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div>
+        <div class="leaf leaf-a">❧</div>
+        <div class="leaf leaf-b">❧</div>
+        <div class="orb">
+          <span>✦</span>
+          <small>GRACE</small>
+          <strong>for today</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="date-strip">
+      <div>
+        <span class="tiny-label">TODAY'S FOCUS</span>
+        <strong id="todayDate"></strong>
+      </div>
+      <div class="focus-pill"><span>●</span> One small faithful step</div>
+    </section>
+
+    <section class="section" id="daily">
+      <div class="section-heading">
+        <p class="eyebrow">Daily encouragement</p>
+        <h2>A little light for today.</h2>
+        <p>Save what speaks to you. Come back whenever your heart needs a reminder.</p>
+      </div>
+
+      <div class="daily-grid">
+        <article class="daily-card verse">
+          <div class="card-top">
+            <div class="round-icon">✦</div>
+            <span class="tag">BIBLE VERSE</span>
+            <button class="heart-btn" id="saveVerse" aria-label="Save verse">♡</button>
+          </div>
+          <blockquote id="verseText"></blockquote>
+          <p class="reference" id="verseReference"></p>
+          <div class="card-actions">
+            <button class="mini-btn" id="newVerse">New verse <span>↗</span></button>
+            <button class="mini-btn" id="copyVerse">Copy</button>
+          </div>
+        </article>
+
+        <article class="daily-card affirmation">
+          <div class="card-top">
+            <div class="round-icon">♡</div>
+            <span class="tag">AFFIRMATION</span>
+            <button class="heart-btn" id="saveAffirmation" aria-label="Save affirmation">♡</button>
+          </div>
+          <h3 id="affirmationText"></h3>
+          <p class="support-text">Read this slowly. You are allowed to believe good things about yourself.</p>
+          <div class="card-actions">
+            <button class="mini-btn" id="newAffirmation">New affirmation <span>↗</span></button>
+            <button class="mini-btn" id="copyAffirmation">Copy</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="marquee">
+      <div>GRACE <span>✦</span> COURAGE <span>✦</span> PATIENCE <span>✦</span> FAITH <span>✦</span> PROGRESS <span>✦</span> GRACE <span>✦</span> COURAGE <span>✦</span></div>
+    </section>
+
+    <section class="section affirmations-section" id="affirmations">
+      <div class="section-heading left">
+        <div>
+          <p class="eyebrow">Words to keep close</p>
+          <h2>Speak gently to yourself.</h2>
+        </div>
+        <p>When your inner voice becomes harsh, choose a kinder sentence.</p>
+      </div>
+
+      <div class="affirmation-grid">
+        <button class="affirmation-tile">I am worthy of grace, even while I am growing.</button>
+        <button class="affirmation-tile">I can begin before I feel completely ready.</button>
+        <button class="affirmation-tile">My worth is not measured by my productivity.</button>
+        <button class="affirmation-tile">I am capable of learning from yesterday without living in it.</button>
+        <button class="affirmation-tile">Small progress is still progress.</button>
+        <button class="affirmation-tile">I choose courage over the fear of getting it wrong.</button>
+      </div>
+      <p class="selected-note" id="selectedNote">Tap an affirmation to make it today's personal focus.</p>
+    </section>
+
+    <section class="quote-section">
+      <div class="quote-card">
+        <div class="quote-symbol">“</div>
+        <p class="tag">A QUIET REMINDER</p>
+        <h2 id="quoteText">You don't have to conquer the whole mountain today. Just take the next faithful step.</h2>
+        <button class="text-btn" id="newQuote">Give me another reminder <span>→</span></button>
+      </div>
+    </section>
+
+    <section class="section" id="growth">
+      <div class="section-heading">
+        <p class="eyebrow">Gentle productivity</p>
+        <h2>When procrastination shows up.</h2>
+        <p>You don't need a huge burst of motivation. Make the beginning small.</p>
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-number">01</div>
+          <div><h3>Choose one thing.</h3><p>Pick the task that would make today feel a little lighter.</p></div>
+        </article>
+        <article class="step">
+          <div class="step-number">02</div>
+          <div><h3>Start for five minutes.</h3><p>Set a timer. You only need enough courage to begin.</p></div>
+        </article>
+        <article class="step">
+          <div class="step-number">03</div>
+          <div><h3>Celebrate the start.</h3><p>Notice what you did instead of only noticing what remains.</p></div>
+        </article>
+      </div>
+
+      <div class="checkin">
+        <div>
+          <span class="tiny-label">DAILY CHECK-IN</span>
+          <h3 id="checkinTitle">Did you take one small step today?</h3>
+        </div>
+        <button class="btn btn-primary" id="checkinBtn">Yes, I did ✦</button>
+      </div>
+    </section>
+
+    <section class="prayer">
+      <div class="prayer-inner">
+        <p class="eyebrow">A prayer for today</p>
+        <h2>“Lord, help me take the next step with courage, patience, and faith.”</h2>
+        <p>You don't have to carry tomorrow today. Give yourself grace for this moment.</p>
+        <div class="prayer-stars">✦ &nbsp; ✦ &nbsp; ✦</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">Grace <b>&</b> Growth</div>
+    <p>Faith for the heart. Courage for the next step.</p>
+    <p class="copyright">© <span id="year"></span> Grace & Growth</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
