@@ -1,73 +1,166 @@
-const verses=[
-{text:"I can do all things through Christ who strengthens me.",ref:"Philippians 4:13"},
-{text:"The Lord is my strength and my shield; my heart trusts in him, and he helps me.",ref:"Psalm 28:7"},
-{text:"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",ref:"Joshua 1:9"},
-{text:"Cast all your anxiety on him because he cares for you.",ref:"1 Peter 5:7"},
-{text:"For God gave us a spirit not of fear but of power and love and self-control.",ref:"2 Timothy 1:7"},
-{text:"Let all that you do be done in love.",ref:"1 Corinthians 16:14"}
-];
-const affirmations=[
-"I am worthy of grace, even while I am growing.",
-"I can begin before I feel completely ready.",
-"My worth is not measured by my productivity.",
-"I am capable of learning from yesterday without living in it.",
-"Small progress is still progress.",
-"I choose courage over the fear of getting it wrong."
-];
-const quotes=[
-"You don't have to conquer the whole mountain today. Just take the next faithful step.",
-"Small progress is still progress. Give yourself permission to begin imperfectly.",
-"You are allowed to rest without calling yourself lazy.",
-"Your worth is not measured by how much you accomplish.",
-"Start where you are. Trust God with what comes next.",
-"You can begin again. Today is not asking you to be perfect."
-];
-const $=id=>document.getElementById(id);
-const random=list=>list[Math.floor(Math.random()*list.length)];
-let currentVerse,currentAffirmation;
+document.addEventListener('DOMContentLoaded', () => {
+  const todayKey = new Date().toISOString().split('T')[0];
+  
+  // --- Dark Mode Setup ---
+  const htmlElement = document.documentElement;
+  const savedTheme = localStorage.getItem('grace_theme');
+  
+  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    htmlElement.classList.add('dark');
+  } else {
+    htmlElement.classList.remove('dark');
+  }
 
-function showVerse(){
- currentVerse=random(verses);$("verseText").textContent=`"${currentVerse.text}"`;$("verseReference").textContent=`— ${currentVerse.ref}`;
-}
-function showAffirmation(){currentAffirmation=random(affirmations);$("affirmationText").textContent=currentAffirmation}
-function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2200)}
-function copy(text){navigator.clipboard?.writeText(text).then(()=>toast("Copied to your clipboard ✦")).catch(()=>toast("Select and copy the text manually."))}
-function setDate(){
- const d=new Date();$("todayDate").textContent=d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});$("year").textContent=d.getFullYear()
-}
-showVerse();showAffirmation();setDate();
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      if (htmlElement.classList.contains('dark')) {
+        htmlElement.classList.remove('dark');
+        localStorage.setItem('grace_theme', 'light');
+      } else {
+        htmlElement.classList.add('dark');
+        localStorage.setItem('grace_theme', 'dark');
+      }
+    });
+  }
 
-$("newVerse").onclick=showVerse;$("newAffirmation").onclick=showAffirmation;
-$("copyVerse").onclick=()=>copy(`"${currentVerse.text}" — ${currentVerse.ref}`);
-$("copyAffirmation").onclick=()=>copy(currentAffirmation);
+  // --- Rhythm, Streaks & Goals State ---
+  let state = JSON.parse(localStorage.getItem('grace_growth_rhythm_state')) || {
+    streak: 0,
+    lastActiveDate: null,
+    checkedInToday: false,
+    goals: [
+      { text: "Take one 5-minute pause", completed: false },
+      { text: "Speak gently to yourself", completed: false }
+    ]
+  };
 
-["saveVerse","saveAffirmation"].forEach(id=>{
- $(id).onclick=()=>{ $(id).classList.toggle("saved"); $(id).textContent=$(id).classList.contains("saved")?"♥":"♡"; toast($(id).classList.contains("saved")?"Saved to this device ♥":"Removed from saved items"); };
+  const streakEl = document.getElementById('streak-count');
+  const goalsContainer = document.getElementById('goals-container');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const addGoalForm = document.getElementById('add-goal-form');
+  const newGoalInput = document.getElementById('new-goal-input');
+  const checkInBtn = document.getElementById('check-in-btn');
+
+  function evaluateStreak() {
+    if (state.lastActiveDate) {
+      const lastDate = new Date(state.lastActiveDate);
+      const currentDate = new Date(todayKey);
+      const diffDays = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays > 1 && !state.checkedInToday) {
+        state.streak = 0;
+        state.checkedInToday = false;
+      }
+    }
+    streakEl.textContent = state.streak;
+    updateCheckInButtonStyle();
+  }
+
+  function updateCheckInButtonStyle() {
+    if (state.checkedInToday) {
+      checkInBtn.textContent = "Checked in for today! ✦";
+      checkInBtn.className = "px-5 py-2.5 bg-stone-200 dark:bg-stone-800 text-stone-500 dark:text-stone-400 text-sm font-medium rounded-xl cursor-default transition-colors";
+    } else {
+      checkInBtn.textContent = "Yes, I did ✦";
+      checkInBtn.className = "px-5 py-2.5 bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white text-sm font-medium rounded-xl transition shadow-sm";
+    }
+  }
+
+  function render() {
+    goalsContainer.innerHTML = '';
+    
+    if (state.goals.length === 0) {
+      goalsContainer.innerHTML = `<p class="text-xs text-stone-400 dark:text-stone-500 italic">No goals set for today yet.</p>`;
+    }
+
+    let completedCount = 0;
+    const totalGoals = state.goals.length;
+
+    state.goals.forEach((goal, index) => {
+      if (goal.completed) completedCount++;
+
+      const goalItem = document.createElement('div');
+      goalItem.className = `flex items-center justify-between p-3 rounded-xl border transition-colors ${
+        goal.completed 
+          ? 'bg-stone-50 dark:bg-stone-800/40 border-stone-200 dark:border-stone-800 text-stone-400 dark:text-stone-500 line-through' 
+          : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200'
+      }`;
+      
+      goalItem.innerHTML = `
+        <label class="flex items-center gap-3 cursor-pointer flex-1 text-sm">
+          <input type="checkbox" data-index="${index}" ${goal.completed ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-700 dark:text-emerald-500 focus:ring-emerald-600 border-stone-300 dark:border-stone-600 dark:bg-stone-700">
+          <span>${goal.text}</span>
+        </label>
+        <button data-delete="${index}" class="text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 px-2 text-xs">✕</button>
+      `;
+      goalsContainer.appendChild(goalItem);
+    });
+
+    let score = completedCount;
+    let maxScore = totalGoals > 0 ? totalGoals : 1;
+    let percentage = Math.round((score / maxScore) * 100);
+    
+    if (state.checkedInToday) percentage = 100;
+
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = `${percentage}%`;
+
+    localStorage.setItem('grace_growth_rhythm_state', JSON.stringify(state));
+  }
+
+  checkInBtn.addEventListener('click', () => {
+    if (!state.checkedInToday) {
+      if (state.lastActiveDate) {
+        const lastDate = new Date(state.lastActiveDate);
+        const currentDate = new Date(todayKey);
+        const diffDays = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) state.streak += 1;
+        else if (diffDays > 1) state.streak = 1;
+      } else {
+        state.streak = 1;
+      }
+
+      state.checkedInToday = true;
+      state.lastActiveDate = todayKey;
+      state.goals.forEach(g => g.completed = true);
+
+      streakEl.textContent = state.streak;
+      updateCheckInButtonStyle();
+      render();
+    }
+  });
+
+  addGoalForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = newGoalInput.value.trim();
+    if (!text) return;
+
+    state.goals.push({ text, completed: false });
+    newGoalInput.value = '';
+    render();
+  });
+
+  goalsContainer.addEventListener('change', (e) => {
+    if (e.target.type === 'checkbox') {
+      state.goals[e.target.getAttribute('data-index')].completed = e.target.checked;
+      render();
+    }
+  });
+
+  goalsContainer.addEventListener('click', (e) => {
+    if (e.target.hasAttribute('data-delete')) {
+      state.goals.splice(e.target.getAttribute('data-delete'), 1);
+      render();
+    }
+  });
+
+  if (state.lastActiveDate !== todayKey) {
+    state.checkedInToday = false;
+  }
+
+  evaluateStreak();
+  render();
 });
-
-document.querySelectorAll(".affirmation-tile").forEach(tile=>{
- tile.onclick=()=>{
-  document.querySelectorAll(".affirmation-tile").forEach(t=>t.classList.remove("active"));
-  tile.classList.add("active");currentAffirmation=tile.textContent;$("affirmationText").textContent=currentAffirmation;
-  $("selectedNote").textContent="Your focus for today: “"+tile.textContent+"”";toast("Your daily affirmation has been set ✦");
-  document.querySelector("#daily").scrollIntoView({behavior:"smooth"});
- };
-});
-$("newQuote").onclick=()=>{$("quoteText").textContent=random(quotes);toast("A new reminder for you ✦")};
-
-const savedStep=localStorage.getItem("graceGrowthStep");
-if(savedStep===new Date().toDateString()){$("checkinTitle").textContent="You took a step today. Be proud of that.";$("checkinBtn").textContent="Done ✦"}
-$("checkinBtn").onclick=()=>{localStorage.setItem("graceGrowthStep",new Date().toDateString());$("checkinTitle").textContent="You took a step today. Be proud of that."; $("checkinBtn").textContent="Done ✦";toast("Every small step counts. Keep going. ✦")};
-
-const menu=$(".menu-btn"),links=$(".nav-links");
-menu.onclick=()=>{const open=links.classList.toggle("open");menu.setAttribute("aria-expanded",open)};
-document.querySelectorAll(".nav-links a").forEach(a=>a.onclick=()=>links.classList.remove("open"));
-
-const storedTheme=localStorage.getItem("graceGrowthTheme");
-if(storedTheme==="dark")document.documentElement.dataset.theme="dark";
-$("themeBtn").onclick=()=>{
- const dark=document.documentElement.dataset.theme==="dark";
- if(dark){delete document.documentElement.dataset.theme;localStorage.setItem("graceGrowthTheme","light");$("themeBtn").textContent="☾"}
- else{document.documentElement.dataset.theme="dark";localStorage.setItem("graceGrowthTheme","dark");$("themeBtn").textContent="☀"}
-};
-if(document.documentElement.dataset.theme==="dark")$("themeBtn").textContent="☀";
