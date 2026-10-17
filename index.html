@@ -1,199 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Grace & Growth — a peaceful daily space for faith, confidence, affirmations, and gentle progress.">
-  <meta name="theme-color" content="#526b5c">
   <title>Grace & Growth | Faith • Confidence • Progress</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
 </head>
-<body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
+<body class="bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-100 transition-colors duration-300 font-sans min-h-screen flex flex-col justify-between p-4 sm:p-8">
 
-  <header class="site-header">
-    <nav class="navbar">
-      <a class="brand" href="#home">
-        <span class="brand-mark">✦</span>
-        <span>Grace <b>&</b> Growth</span>
-      </a>
-
-      <button class="menu-btn" aria-label="Open menu" aria-expanded="false">☰</button>
-
-      <div class="nav-links">
-        <a href="#home">Home</a>
-        <a href="#daily">Daily</a>
-        <a href="#affirmations">Affirmations</a>
-        <a href="#growth">Growth</a>
-      </div>
-
-      <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">☾</button>
-    </nav>
+  <!-- Header / Nav -->
+  <header class="max-w-xl mx-auto w-full flex items-center justify-between py-4 mb-6">
+    <div class="flex items-center gap-2 font-serif text-lg font-medium">
+      <span class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center text-sm shadow-sm">✦</span>
+      <span>Grace & Growth</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <!-- Dark Mode Toggle Button (matches your [☾] icon) -->
+      <button id="theme-toggle" aria-label="Toggle dark mode" class="w-10 h-10 rounded-full border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-900 transition">
+        ☾
+      </button>
+    </div>
   </header>
 
-  <main id="home">
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow"><span></span> Your gentle place to begin again <span></span></p>
-        <h1>You are growing,<br><em>even on the days you can't see it.</em></h1>
-        <p class="hero-description">
-          A peaceful space for the moments when procrastination, self-doubt, or fear
-          gets loud. Breathe. Pray. Take one small step.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#daily">My daily encouragement <span>→</span></a>
-          <a class="btn btn-ghost" href="#affirmations">Explore affirmations</a>
-        </div>
-
-        <div class="hero-trust">
-          <span>♡</span> You don't have to be perfect to make progress.
-        </div>
-      </div>
-
-      <div class="hero-art" aria-hidden="true">
-        <div class="sun"></div>
-        <div class="leaf leaf-a">❧</div>
-        <div class="leaf leaf-b">❧</div>
-        <div class="orb">
-          <span>✦</span>
-          <small>GRACE</small>
-          <strong>for today</strong>
-        </div>
-      </div>
+  <!-- Main Content Container -->
+  <main class="w-full space-y-8">
+    
+    <!-- Hero / Intro Section -->
+    <section class="max-w-xl mx-auto text-center space-y-3 py-6">
+      <p class="text-xs uppercase tracking-widest text-emerald-800 dark:text-emerald-400 font-medium">Your gentle place to begin again</p>
+      <h1 class="font-serif text-3xl sm:text-4xl text-stone-900 dark:text-stone-50 leading-tight">You are growing, even on the days you can't see it.</h1>
+      <p class="text-stone-600 dark:text-stone-400 text-sm max-w-md mx-auto">
+        A peaceful space for the moments when procrastination, self-doubt, or fear gets loud. Breathe. Pray. Take one small step.
+      </p>
     </section>
 
-    <section class="date-strip">
+    <!-- DAILY RHYTHM, STREAK & GOALS SECTION -->
+    <section id="daily-rhythm-section" class="max-w-xl mx-auto p-6 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors duration-300">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-serif text-xl text-stone-800 dark:text-stone-100">Daily Rhythm & Check-In</h3>
+        <!-- Streak Badge -->
+        <div class="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 px-3 py-1 rounded-full text-sm font-medium border border-amber-200 dark:border-amber-800/50">
+          <span>🔥</span>
+          <span id="streak-count">0</span> day streak
+        </div>
+      </div>
+
+      <!-- Daily Check-In Big Button -->
+      <div class="mb-6 p-4 bg-stone-50 dark:bg-stone-800/50 rounded-xl border border-stone-200 dark:border-stone-700 text-center transition-colors">
+        <p class="text-xs uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2 font-medium">Did you take one small step today?</p>
+        <button id="check-in-btn" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white text-sm font-medium rounded-xl transition shadow-sm">
+          Yes, I did ✦
+        </button>
+      </div>
+
+      <!-- Goals Set for Today -->
+      <div class="mb-6">
+        <label class="block text-xs uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2 font-medium">Goals Set for Today</label>
+        <div id="goals-container" class="space-y-2 mb-3">
+          <!-- Dynamic goals will load here -->
+        </div>
+        
+        <!-- Add Goal Input -->
+        <form id="add-goal-form" class="flex gap-2">
+          <input 
+            type="text" 
+            id="new-goal-input" 
+            placeholder="Add a small goal for today..." 
+            class="flex-1 px-4 py-2 text-sm bg-stone-50 dark:bg-stone-800 text-stone-800 dark:text-stone-100 border border-stone-200 dark:border-stone-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-400 placeholder:text-stone-400 dark:placeholder:text-stone-500"
+          />
+          <button type="submit" class="px-4 py-2 bg-stone-800 hover:bg-stone-700 dark:bg-stone-200 dark:hover:bg-white dark:text-stone-900 text-white text-sm rounded-xl transition">
+            Add
+          </button>
+        </form>
+      </div>
+
+      <!-- Progress Bar for the Day -->
       <div>
-        <span class="tiny-label">TODAY'S FOCUS</span>
-        <strong id="todayDate"></strong>
-      </div>
-      <div class="focus-pill"><span>●</span> One small faithful step</div>
-    </section>
-
-    <section class="section" id="daily">
-      <div class="section-heading">
-        <p class="eyebrow">Daily encouragement</p>
-        <h2>A little light for today.</h2>
-        <p>Save what speaks to you. Come back whenever your heart needs a reminder.</p>
-      </div>
-
-      <div class="daily-grid">
-        <article class="daily-card verse">
-          <div class="card-top">
-            <div class="round-icon">✦</div>
-            <span class="tag">BIBLE VERSE</span>
-            <button class="heart-btn" id="saveVerse" aria-label="Save verse">♡</button>
-          </div>
-          <blockquote id="verseText"></blockquote>
-          <p class="reference" id="verseReference"></p>
-          <div class="card-actions">
-            <button class="mini-btn" id="newVerse">New verse <span>↗</span></button>
-            <button class="mini-btn" id="copyVerse">Copy</button>
-          </div>
-        </article>
-
-        <article class="daily-card affirmation">
-          <div class="card-top">
-            <div class="round-icon">♡</div>
-            <span class="tag">AFFIRMATION</span>
-            <button class="heart-btn" id="saveAffirmation" aria-label="Save affirmation">♡</button>
-          </div>
-          <h3 id="affirmationText"></h3>
-          <p class="support-text">Read this slowly. You are allowed to believe good things about yourself.</p>
-          <div class="card-actions">
-            <button class="mini-btn" id="newAffirmation">New affirmation <span>↗</span></button>
-            <button class="mini-btn" id="copyAffirmation">Copy</button>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="marquee">
-      <div>GRACE <span>✦</span> COURAGE <span>✦</span> PATIENCE <span>✦</span> FAITH <span>✦</span> PROGRESS <span>✦</span> GRACE <span>✦</span> COURAGE <span>✦</span></div>
-    </section>
-
-    <section class="section affirmations-section" id="affirmations">
-      <div class="section-heading left">
-        <div>
-          <p class="eyebrow">Words to keep close</p>
-          <h2>Speak gently to yourself.</h2>
+        <div class="flex justify-between text-xs text-stone-500 dark:text-stone-400 mb-1">
+          <span>Today's Progress</span>
+          <span id="progress-text">0%</span>
         </div>
-        <p>When your inner voice becomes harsh, choose a kinder sentence.</p>
-      </div>
-
-      <div class="affirmation-grid">
-        <button class="affirmation-tile">I am worthy of grace, even while I am growing.</button>
-        <button class="affirmation-tile">I can begin before I feel completely ready.</button>
-        <button class="affirmation-tile">My worth is not measured by my productivity.</button>
-        <button class="affirmation-tile">I am capable of learning from yesterday without living in it.</button>
-        <button class="affirmation-tile">Small progress is still progress.</button>
-        <button class="affirmation-tile">I choose courage over the fear of getting it wrong.</button>
-      </div>
-      <p class="selected-note" id="selectedNote">Tap an affirmation to make it today's personal focus.</p>
-    </section>
-
-    <section class="quote-section">
-      <div class="quote-card">
-        <div class="quote-symbol">“</div>
-        <p class="tag">A QUIET REMINDER</p>
-        <h2 id="quoteText">You don't have to conquer the whole mountain today. Just take the next faithful step.</h2>
-        <button class="text-btn" id="newQuote">Give me another reminder <span>→</span></button>
-      </div>
-    </section>
-
-    <section class="section" id="growth">
-      <div class="section-heading">
-        <p class="eyebrow">Gentle productivity</p>
-        <h2>When procrastination shows up.</h2>
-        <p>You don't need a huge burst of motivation. Make the beginning small.</p>
-      </div>
-
-      <div class="steps">
-        <article class="step">
-          <div class="step-number">01</div>
-          <div><h3>Choose one thing.</h3><p>Pick the task that would make today feel a little lighter.</p></div>
-        </article>
-        <article class="step">
-          <div class="step-number">02</div>
-          <div><h3>Start for five minutes.</h3><p>Set a timer. You only need enough courage to begin.</p></div>
-        </article>
-        <article class="step">
-          <div class="step-number">03</div>
-          <div><h3>Celebrate the start.</h3><p>Notice what you did instead of only noticing what remains.</p></div>
-        </article>
-      </div>
-
-      <div class="checkin">
-        <div>
-          <span class="tiny-label">DAILY CHECK-IN</span>
-          <h3 id="checkinTitle">Did you take one small step today?</h3>
+        <div class="w-full bg-stone-100 dark:bg-stone-800 rounded-full h-2.5 overflow-hidden">
+          <div id="progress-bar" class="bg-emerald-700 dark:bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
         </div>
-        <button class="btn btn-primary" id="checkinBtn">Yes, I did ✦</button>
       </div>
     </section>
 
-    <section class="prayer">
-      <div class="prayer-inner">
-        <p class="eyebrow">A prayer for today</p>
-        <h2>“Lord, help me take the next step with courage, patience, and faith.”</h2>
-        <p>You don't have to carry tomorrow today. Give yourself grace for this moment.</p>
-        <div class="prayer-stars">✦ &nbsp; ✦ &nbsp; ✦</div>
-      </div>
-    </section>
   </main>
 
-  <footer>
-    <div class="footer-brand">Grace <b>&</b> Growth</div>
+  <!-- Footer -->
+  <footer class="max-w-xl mx-auto w-full text-center py-6 text-xs text-stone-500 dark:text-stone-400 border-t border-stone-200 dark:border-stone-800 mt-12">
+    <p class="font-serif text-stone-700 dark:text-stone-300 text-sm mb-1">Grace & Growth</p>
     <p>Faith for the heart. Courage for the next step.</p>
-    <p class="copyright">© <span id="year"></span> Grace & Growth</p>
+    <p class="mt-3">© 2026 Grace & Growth</p>
   </footer>
 
-  <div class="toast" id="toast"></div>
-  <script src="script.js"></script>
+  <!-- JavaScript Logic for Streaks, Goals, Progress, & Dark Mode -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const todayKey = new Date().toISOString().split('T')[0];
+      
+      // --- Dark Mode Setup ---
+      const htmlElement = document.documentElement;
+      const savedTheme = localStorage.getItem('grace_theme');
+      
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlElement.classList.add('dark');
+      } else {
+        htmlElement.classList.remove('dark');
+      }
+
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          if (htmlElement.classList.contains('dark')) {
+            htmlElement.classList.remove('dark');
+            localStorage.setItem('grace_theme', 'light');
+          } else {
+            htmlElement.classList.add('dark');
+            localStorage.setItem('grace_theme', 'dark');
+          }
+        });
+      }
+
+      // --- Rhythm, Streaks & Goals State ---
+      let state = JSON.parse(localStorage.getItem('grace_growth_rhythm_state')) || {
+        streak: 0,
+        lastActiveDate: null,
+        checkedInToday: false,
+        goals: [
+          { text: "Take one 5-minute pause", completed: false },
+          { text: "Speak gently to yourself", completed: false }
+        ]
+      };
+
+      const streakEl = document.getElementById('streak-count');
+      const goalsContainer = document.getElementById('goals-container');
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+      const addGoalForm = document.getElementById('add-goal-form');
+      const newGoalInput = document.getElementById('new-goal-input');
+      const checkInBtn = document.getElementById('check-in-btn');
+
+      function evaluateStreak() {
+        if (state.lastActiveDate) {
+          const lastDate = new Date(state.lastActiveDate);
+          const currentDate = new Date(todayKey);
+          const diffDays = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+          
+          if (diffDays > 1 && !state.checkedInToday) {
+            state.streak = 0;
+            state.checkedInToday = false;
+          }
+        }
+        streakEl.textContent = state.streak;
+        updateCheckInButtonStyle();
+      }
+
+      function updateCheckInButtonStyle() {
+        if (state.checkedInToday) {
+          checkInBtn.textContent = "Checked in for today! ✦";
+          checkInBtn.className = "px-5 py-2.5 bg-stone-200 dark:bg-stone-800 text-stone-500 dark:text-stone-400 text-sm font-medium rounded-xl cursor-default transition-colors";
+        } else {
+          checkInBtn.textContent = "Yes, I did ✦";
+          checkInBtn.className = "px-5 py-2.5 bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white text-sm font-medium rounded-xl transition shadow-sm";
+        }
+      }
+
+      function render() {
+        goalsContainer.innerHTML = '';
+        
+        if (state.goals.length === 0) {
+          goalsContainer.innerHTML = `<p class="text-xs text-stone-400 dark:text-stone-500 italic">No goals set for today yet.</p>`;
+        }
+
+        let completedCount = 0;
+        const totalGoals = state.goals.length;
+
+        state.goals.forEach((goal, index) => {
+          if (goal.completed) completedCount++;
+
+          const goalItem = document.createElement('div');
+          goalItem.className = `flex items-center justify-between p-3 rounded-xl border transition-colors ${
+            goal.completed 
+              ? 'bg-stone-50 dark:bg-stone-800/40 border-stone-200 dark:border-stone-800 text-stone-400 dark:text-stone-500 line-through' 
+              : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200'
+          }`;
+          
+          goalItem.innerHTML = `
+            <label class="flex items-center gap-3 cursor-pointer flex-1 text-sm">
+              <input type="checkbox" data-index="${index}" ${goal.completed ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-700 dark:text-emerald-500 focus:ring-emerald-600 border-stone-300 dark:border-stone-600 dark:bg-stone-700">
+              <span>${goal.text}</span>
+            </label>
+            <button data-delete="${index}" class="text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 px-2 text-xs">✕</button>
+          `;
+          goalsContainer.appendChild(goalItem);
+        });
+
+        let score = completedCount;
+        let maxScore = totalGoals > 0 ? totalGoals : 1;
+        let percentage = Math.round((score / maxScore) * 100);
+        
+        if (state.checkedInToday) percentage = 100;
+
+        progressBar.style.width = `${percentage}%`;
+        progressText.textContent = `${percentage}%`;
+
+        localStorage.setItem('grace_growth_rhythm_state', JSON.stringify(state));
+      }
+
+      checkInBtn.addEventListener('click', () => {
+        if (!state.checkedInToday) {
+          if (state.lastActiveDate) {
+            const lastDate = new Date(state.lastActiveDate);
+            const currentDate = new Date(todayKey);
+            const diffDays = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) state.streak += 1;
+            else if (diffDays > 1) state.streak = 1;
+          } else {
+            state.streak = 1;
+          }
+
+          state.checkedInToday = true;
+          state.lastActiveDate = todayKey;
+          state.goals.forEach(g => g.completed = true);
+
+          streakEl.textContent = state.streak;
+          updateCheckInButtonStyle();
+          render();
+        }
+      });
+
+      addGoalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = newGoalInput.value.trim();
+        if (!text) return;
+
+        state.goals.push({ text, completed: false });
+        newGoalInput.value = '';
+        render();
+      });
+
+      goalsContainer.addEventListener('change', (e) => {
+        if (e.target.type === 'checkbox') {
+          state.goals[e.target.getAttribute('data-index')].completed = e.target.checked;
+          render();
+        }
+      });
+
+      goalsContainer.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-delete')) {
+          state.goals.splice(e.target.getAttribute('data-delete'), 1);
+          render();
+        }
+      });
+
+      if (state.lastActiveDate !== todayKey) {
+        state.checkedInToday = false;
+      }
+
+      evaluateStreak();
+      render();
+    });
+  </script>
 </body>
 </html>
